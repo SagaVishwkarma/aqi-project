@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AQI Prediction by Area</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: white;
+        }
+
+        .container {
+            margin-top: 80px;
+        }
+
+        select, button {
+            padding: 10px;
+            margin: 10px;
+            width: 250px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🌍 AQI Prediction by Area</h1>
+
+<div class="container">
+    <select id="citySelect"></select>
+    <br>
+    <button onclick="showAQI()">Check AQI</button>
+
+    <div class="result" id="output"></div>
+</div>
+
+<script>
+let data = {};
+
+fetch("data.json")
+    .then(response => response.json())
+    .then(json => {
+        data = json;
+        let select = document.getElementById("citySelect");
+        Object.keys(data).sort().forEach(city => {
+            let option = document.createElement("option");
+            option.value = city;
+            option.text = city;
+            select.appendChild(option);
+        });
+    });
+
+function showAQI() {
+    let city = document.getElementById("citySelect").value;
+    let info = data[city];
+
+    document.getElementById("output").innerHTML =
+        "<b>Date:</b> " + info.date + "<br>" +
+        "<b>AQI:</b> " + info.aqi + "<br>" +
+        "<b>Category:</b> " + info.category;
+}
+</script>
+
+</body>
+</html>
+
