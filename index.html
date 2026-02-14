@@ -1,70 +1,233 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AQI Prediction by Area</title>
-    <style>
-        body {
-            font-family: Arial;
-            text-align: center;
-            background: linear-gradient(to right, #141e30, #243b55);
-            color: white;
-        }
+  <title>AQI Prediction System</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        .container {
-            margin-top: 80px;
-        }
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+    }
 
-        select, button {
-            padding: 10px;
-            margin: 10px;
-            width: 250px;
-        }
+    /* NAVBAR */
+    .navbar {
+      background: #0f3057;
+      padding: 15px 40px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .result {
-            margin-top: 20px;
-            font-size: 20px;
-        }
-    </style>
+    .navbar h2 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 500;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(to right, #00587a, #0f3057);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    /* CARDS */
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: -40px;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 350px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button {
+      background: #0f3057;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+    }
+
+    button:hover {
+      background: #00587a;
+    }
+
+    .result {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    /* GRAPH SECTION */
+    .graph-section {
+      margin: 60px auto;
+      width: 80%;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #0f3057;
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>🌍 AQI Prediction by Area</h1>
-
-<div class="container">
-    <select id="citySelect"></select>
-    <br>
-    <button onclick="showAQI()">Check AQI</button>
-
-    <div class="result" id="output"></div>
+<!-- NAVBAR -->
+<div class="navbar">
+  <h2>🌍 AQI Prediction System</h2>
+  <div>
+    <a href="#">Home</a>
+    <a href="#prediction">Prediction</a>
+    <a href="#visualization">Visualization</a>
+  </div>
 </div>
 
+<!-- HERO -->
+<div class="hero">
+  <h1>AQI Prediction</h1>
+  <p>Smart Air Quality Index Monitoring & Prediction Platform</p>
+</div>
+
+<!-- PREDICTION SECTION -->
+<div class="container" id="prediction">
+
+  <div class="card">
+    <h3>Select City</h3>
+    <select id="citySelect"></select>
+    <button onclick="getAQI()">Check AQI</button>
+  </div>
+
+  <div class="card">
+    <h3>Prediction Result</h3>
+    <div id="output"></div>
+  </div>
+
+</div>
+
+<!-- GRAPH SECTION -->
+<div class="graph-section" id="visualization">
+  <h3>City AQI Comparison</h3>
+  <canvas id="myChart"></canvas>
+</div>
+
+<footer>
+  Developed for PBL Mid-Term Evaluation | 2026
+</footer>
+
 <script>
-let data = {};
 
-fetch("data.json")
-    .then(response => response.json())
-    .then(json => {
-        data = json;
-        let select = document.getElementById("citySelect");
-        Object.keys(data).sort().forEach(city => {
-            let option = document.createElement("option");
-            option.value = city;
-            option.text = city;
-            select.appendChild(option);
-        });
-    });
+fetch('data.json')
+.then(res => res.json())
+.then(data => {
 
-function showAQI() {
-    let city = document.getElementById("citySelect").value;
-    let info = data[city];
+  const citySelect = document.getElementById("citySelect");
+
+  Object.keys(data).forEach(city => {
+    let option = document.createElement("option");
+    option.value = city;
+    option.text = city;
+    citySelect.appendChild(option);
+  });
+
+  const ctx = document.getElementById('myChart');
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'AQI Value',
+        data: [],
+        backgroundColor: '#0f3057'
+      }]
+    }
+  });
+
+  window.getAQI = function() {
+
+    let city = citySelect.value;
+    let aqi = data[city].AQI;
+    let category = data[city].Category;
+
+    let color;
+
+    if(aqi <= 50) color = "#4CAF50";
+    else if(aqi <= 100) color = "#8BC34A";
+    else if(aqi <= 200) color = "#FFC107";
+    else if(aqi <= 300) color = "#FF5722";
+    else color = "#D32F2F";
 
     document.getElementById("output").innerHTML =
-        "<b>Date:</b> " + info.date + "<br>" +
-        "<b>AQI:</b> " + info.aqi + "<br>" +
-        "<b>Category:</b> " + info.category;
-}
+      `<div class="result" style="background:${color}; color:white;">
+        AQI: ${aqi} <br>
+        Category: ${category}
+      </div>`;
+
+    chart.data.labels = [city];
+    chart.data.datasets[0].data = [aqi];
+    chart.update();
+  }
+
+});
+
 </script>
 
 </body>
 </html>
-
