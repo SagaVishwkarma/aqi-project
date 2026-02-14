@@ -1,0 +1,122 @@
+{
+  "Jorapokhar": {
+    "aqi": 236.0,
+    "category": "Poor",
+    "date": "2020-06-02"
+  },
+  "Brajrajnagar": {
+    "aqi": 132.0,
+    "category": "Moderate",
+    "date": "2020-06-09"
+  },
+  "Ahmedabad": {
+    "aqi": 98.0,
+    "category": "Satisfactory",
+    "date": "2020-06-30"
+  },
+  "Coimbatore": {
+    "aqi": 33.0,
+    "category": "Good",
+    "date": "2020-06-30"
+  },
+  "Delhi": {
+    "aqi": 101.0,
+    "category": "Moderate",
+    "date": "2020-07-01"
+  },
+  "Chennai": {
+    "aqi": 92.0,
+    "category": "Satisfactory",
+    "date": "2020-07-01"
+  },
+  "Chandigarh": {
+    "aqi": 66.0,
+    "category": "Satisfactory",
+    "date": "2020-07-01"
+  },
+  "Gurugram": {
+    "aqi": 157.0,
+    "category": "Moderate",
+    "date": "2020-07-01"
+  },
+  "Hyderabad": {
+    "aqi": 48.0,
+    "category": "Good",
+    "date": "2020-07-01"
+  },
+  "Guwahati": {
+    "aqi": 36.0,
+    "category": "Good",
+    "date": "2020-07-01"
+  },
+  "Kochi": {
+    "aqi": 102.0,
+    "category": "Moderate",
+    "date": "2020-07-01"
+  },
+  "Kolkata": {
+    "aqi": 45.0,
+    "category": "Good",
+    "date": "2020-07-01"
+  },
+  "Bhopal": {
+    "aqi": 69.0,
+    "category": "Satisfactory",
+    "date": "2020-07-01"
+  },
+  "Mumbai": {
+    "aqi": 53.0,
+    "category": "Satisfactory",
+    "date": "2020-07-01"
+  },
+  "Patna": {
+    "aqi": 98.0,
+    "category": "Satisfactory",
+    "date": "2020-07-01"
+  },
+  "Shillong": {
+    "aqi": 24.0,
+    "category": "Good",
+    "date": "2020-07-01"
+  },
+  "Bengaluru": {
+    "aqi": 43.0,
+    "category": "Good",
+    "date": "2020-07-01"
+  },
+  "Talcher": {
+    "aqi": 101.0,
+    "category": "Moderate",
+    "date": "2020-07-01"
+  },
+  "Amritsar": {
+    "aqi": 78.0,
+    "category": "Satisfactory",
+    "date": "2020-07-01"
+  },
+  "Amaravati": {
+    "aqi": 54.0,
+    "category": "Satisfactory",
+    "date": "2020-07-01"
+  },
+  "Thiruvananthapuram": {
+    "aqi": 41.0,
+    "category": "Good",
+    "date": "2020-07-01"
+  },
+  "Aizawl": {
+    "aqi": 20.0,
+    "category": "Good",
+    "date": "2020-07-01"
+  },
+  "Jaipur": {
+    "aqi": 70.0,
+    "category": "Satisfactory",
+    "date": "2020-07-01"
+  },
+  "Visakhapatnam": {
+    "aqi": 50.0,
+    "category": "Good",
+    "date": "2020-07-01"
+  }
+}
