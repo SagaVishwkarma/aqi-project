@@ -4,121 +4,157 @@
   <title>AQI Prediction System</title>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: linear-gradient(to right, #1e3c72, #2a5298);
-      color: white;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+    }
+
+    .container {
+      width: 420px;
+      padding: 30px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      text-align: center;
+      color: white;
     }
 
     h1 {
-      margin-top: 40px;
+      margin-bottom: 20px;
+      font-size: 26px;
+      font-weight: 600;
     }
 
-    .card {
-      background: white;
-      color: black;
-      width: 350px;
-      margin: 40px auto;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-
-    select, button {
-      width: 90%;
+    select, input {
+      width: 100%;
       padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input {
+      background: rgba(255,255,255,0.9);
+    }
+
+    select {
+      background: white;
     }
 
     button {
-      background: #1e3c72;
-      color: white;
-      cursor: pointer;
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 10px;
       border: none;
+      background: #00c6ff;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
     }
 
     button:hover {
-      background: #163060;
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
-    #output {
-      margin-top: 15px;
+    .result {
+      margin-top: 20px;
       padding: 15px;
-      border-radius: 8px;
+      border-radius: 12px;
+      font-size: 18px;
       font-weight: bold;
+      display: none;
+      transition: 0.3s;
     }
+
   </style>
 </head>
 
 <body>
 
+<div class="container">
   <h1>🌍 AQI Prediction</h1>
 
-  <div class="card">
-    <select id="city"></select>
-    <button id="btn">Check AQI</button>
-    <div id="output"></div>
-  </div>
+  <select id="city">
+    <option>Delhi</option>
+    <option>Mumbai</option>
+    <option>Chennai</option>
+    <option>Bengaluru</option>
+    <option>Ahmedabad</option>
+  </select>
+
+  <input type="number" id="so2" placeholder="SO2 Value">
+  <input type="number" id="no2" placeholder="NO2 Value">
+  <input type="number" id="pm25" placeholder="PM2.5 Value">
+  <input type="number" id="co" placeholder="CO Value">
+  <input type="number" id="o3" placeholder="O3 Value">
+
+  <button onclick="predictAQI()">Predict AQI</button>
+
+  <div class="result" id="output"></div>
+</div>
 
 <script>
-fetch('data.json')
-  .then(response => response.json())
-  .then(data => {
+function predictAQI() {
 
-    const citySelect = document.getElementById("city");
-    const resultBox = document.getElementById("output");
-    const button = document.getElementById("btn");
+  let so2 = parseFloat(document.getElementById("so2").value) || 0;
+  let no2 = parseFloat(document.getElementById("no2").value) || 0;
+  let pm25 = parseFloat(document.getElementById("pm25").value) || 0;
+  let co = parseFloat(document.getElementById("co").value) || 0;
+  let o3 = parseFloat(document.getElementById("o3").value) || 0;
 
-    // Populate dropdown
-    Object.keys(data).forEach(city => {
-      const option = document.createElement("option");
-      option.value = city;
-      option.textContent = city;
-      citySelect.appendChild(option);
-    });
+  // Demo Prediction Formula
+  let aqi = (so2 * 0.2) + (no2 * 0.2) + (pm25 * 0.3) + (co * 0.1) + (o3 * 0.2);
 
-    // Button click event
-    button.addEventListener("click", function() {
+  let category = "";
+  let color = "";
 
-      const selectedCity = citySelect.value;
+  if (aqi <= 50) {
+    category = "Good";
+    color = "#4CAF50";
+  }
+  else if (aqi <= 100) {
+    category = "Satisfactory";
+    color = "#8BC34A";
+  }
+  else if (aqi <= 200) {
+    category = "Moderate";
+    color = "#FFC107";
+  }
+  else if (aqi <= 300) {
+    category = "Poor";
+    color = "#FF5722";
+  }
+  else {
+    category = "Very Poor";
+    color = "#D32F2F";
+  }
 
-      if(data[selectedCity]) {
+  const output = document.getElementById("output");
+  output.style.display = "block";
+  output.style.background = color;
 
-        const aqi = data[selectedCity].aqi;
-        const category = data[selectedCity].category;
-        const date = data[selectedCity].date;
-
-        // Color based on AQI
-        let color;
-
-        if(aqi <= 50) color = "#4CAF50";
-        else if(aqi <= 100) color = "#8BC34A";
-        else if(aqi <= 200) color = "#FFC107";
-        else if(aqi <= 300) color = "#FF5722";
-        else color = "#D32F2F";
-
-        resultBox.style.background = color;
-        resultBox.style.color = "white";
-
-        resultBox.innerHTML = `
-          AQI: ${aqi} <br>
-          Category: ${category} <br>
-          Date: ${date}
-        `;
-
-      } else {
-        resultBox.innerHTML = "No data available";
-      }
-
-    });
-
-  });
+  output.innerHTML = `
+    Predicted AQI: ${aqi.toFixed(2)} <br>
+    Category: ${category}
+  `;
+}
 </script>
 
 </body>
